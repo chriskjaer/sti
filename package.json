@@ -1,0 +1,25 @@
+{
+  "name": "sti",
+  "version": "1.0.0",
+  "description": "Audit trail for node",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "through": "^2.3.6"
+  },
+  "devDependencies": {
+    "6to5": "^3.5.3"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "audit",
+    "trail",
+    "utility"
+  ],
+  "author": "Chris Kjær Sørensen",
+  "license": "MIT"
+}
