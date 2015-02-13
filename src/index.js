@@ -4,15 +4,15 @@ import through from 'through';
 import { Readable, Transform } from 'stream';
 
 class AuditMerger extends Transform {
-  constructor( defaultAudit, isStream ) {
+  constructor( defaultAudit, isWriteableStream ) {
     super({ objectMode: true });
     this.defaultAudit = defaultAudit;
-    this._isStream = isStream;
+    this._isWritableStream = isWriteableStream;
   }
 
   _transform(chunck, encoding, done) {
     let audit = Object.assign(chunck, this.defaultAudit );
-    if (this._isStream) {
+    if (this._isWritableStream) {
       this.push(JSON.stringify(audit) + '\n');
     }
     else {
@@ -46,15 +46,21 @@ export default class Sti {
   }
 
   connect(action, defaultAudit) {
-    let isStream = typeof action !== 'function';
-    let mergedStream = this.stream.pipe( new AuditMerger(defaultAudit, isStream) );
+    const isWriteableStream = typeof action.on === 'function' && action.writable;
+    const mergedStream = this.stream.pipe(
+      new AuditMerger(defaultAudit, isWriteableStream)
+    );
 
-    if ( isStream) {
+    if ( isWriteableStream ) {
       mergedStream.pipe( action );
     }
 
-    else {
+    else if ( typeof action === 'function' ) {
       mergedStream.pipe( through(action) );
+    }
+
+    else {
+      throw new TypeError('sti.connect only accepts functions or writeable streams');
     }
   }
 }

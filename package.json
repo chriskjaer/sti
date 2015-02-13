@@ -1,6 +1,6 @@
 {
   "name": "sti",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Audit trail for node",
   "main": "lib/index.js",
   "directories": {
