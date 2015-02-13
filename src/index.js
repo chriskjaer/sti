@@ -34,7 +34,7 @@ export default class Sti {
     const { actor, target, data } = audit;
     let { action } = audit; // TODO: Sanitize string
     let payload = Object.seal({
-      timestamp: Date.now(),
+      timestamp: new Date().toISOString(),
       area: this.name,
       actor,
       action,
